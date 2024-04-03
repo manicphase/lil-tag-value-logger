@@ -12,27 +12,27 @@ from db.database import get_db
 from helpers import dt_to_ts
 
 global last_update
-global session_id
+global _session_id
 last_update = 0
-session_id = 0
+_session_id = 0
 
 def get_session_id(db):
     global last_update
-    global session_id
+    global _session_id
 
     if last_update < time.time() - 10:
         last = db.query(models.Entry).order_by(models.Entry.id.desc()).first()
         if last:
-            session_id = last.session_id
-            print("got session id from db")
-        session_id += 1
+            _session_id = last.session_id
+            print(f'got last session id from db: {_session_id}')
+        _session_id += 1
     last_update = time.time()
+    return _session_id
 
 @router.get("/add")
-def add_entry(tag=None, value=None, recording_id=None, db: Session=Depends(get_db)):
-    global last_update
-    global session_id
-    get_session_id(db)
+def add_entry(tag, value, recording_id=None, session_id:int=None, db: Session=Depends(get_db)):
+    if not session_id: 
+        session_id = get_session_id(db)
     crud.add(tag, value, session_id, recording_id, db)
     print(f"tag: {tag} | value: {value}")
     return session_id
