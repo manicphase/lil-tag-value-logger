@@ -44,3 +44,4 @@ Using all these options together allows to make intricate graphs with a few simp
 ## Further documentation
 
 Further API documentation can be found at http://localhost:8000/docs
+A video demonstration of this software in use can be found at https://youtu.be/Tpuqa-kPnOA?si=8_orNm2klPP7aKHF&t=201
